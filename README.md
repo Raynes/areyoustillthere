@@ -7,7 +7,6 @@ A library for email verification.
 
 Will support:
 
-* Email format validation.
 * Rapportive lookups.
 
 ## Usage
