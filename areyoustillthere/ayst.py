@@ -43,7 +43,7 @@ class VerificationException(Exception):
     def __str__(self):
         return repr(self.value)
 
-def smtp_check(user, host):
+def smtp_check(user, host, servers):
     """Try to verify that an email address exists via poking
     at SMTP. This often won't work, but is like magic when it
     does. You can verify if it works by giving a random email
@@ -52,7 +52,7 @@ def smtp_check(user, host):
     allow verification or has wildcards tuned on.
 
     """
-    for (_, server) in mxlookup(host):
+    for server in servers:
         try:
             smtp = smtplib.SMTP()
             smtp.connect(server)
@@ -72,6 +72,7 @@ class Email:
     def __init__(self, email):
         self._sneaky = None
         self.user, self.host = email.split('@')
+        self.servers = [server for (_, server) in mxlookup(self.host)]
         self.test_user = str(uuid.uuid1()) 
 
     def validate(self):
@@ -83,12 +84,12 @@ class Email:
 
         """
         if self._sneaky is None:
-            self._sneaky = smtp_check(self.test_user, self.host)
+            self._sneaky = smtp_check(self.test_user, self.host, self.servers)
             return self.validate()
         elif self._sneaky is True:
             message = "Server doesn't allow verification or has wildcards " \
                       "enabled."
             raise VerificationException(message)
         else:
-            self.valid = smtp_check(self.user, self.host)
+            self.valid = smtp_check(self.user, self.host, self.servers)
             return self.valid
