@@ -3,7 +3,6 @@ address exists using smtp.
 
 """
 import smtplib
-import gevent
 import uuid
 from DNS import Base
 from DNS.Base import ServerError
@@ -71,9 +70,10 @@ def smtp_check(user, host, servers):
 class Email:
     def __init__(self, email):
         self._sneaky = None
+        self.valid = None
         self.user, self.host = email.split('@')
         self.servers = [server for (_, server) in mxlookup(self.host)]
-        self.test_user = str(uuid.uuid1()) 
+        self.test_user = str(uuid.uuid1())
 
     def validate(self):
         """Try to validate via smtp that an email address exists.
