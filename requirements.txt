@@ -1,5 +1,4 @@
-requests>=2.2.1
-nameparser>=0.2.9
 pydns>=2.3.6
-gevent>=1.0.1
--e git://github.com/jordan-wright/rapportive@3b5cf37#egg=rapportive
+nose
+elpy
+rope
