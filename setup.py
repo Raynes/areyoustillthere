@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name='areyoustillthere',
-    version='0.1.0',
+    version='0.1.1',
     long_description=__doc__,
     packages=['ayst'],
     include_package_data=True,
