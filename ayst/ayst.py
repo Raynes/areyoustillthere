@@ -73,6 +73,8 @@ class Email:
         self.valid = None
         self.user, self.host = email.split('@')
         self.servers = [server for (_, server) in mxlookup(self.host)]
+        if not self.servers:
+            raise VerificationException('No MX records for this domain.')
         self.test_user = str(uuid.uuid1())
 
     def validate(self):
